@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-Fine-tuning LLaMA-3.2-8B-Instruct on HPC + Code datasets
+Fine-tuning LLaMA-3-8B-Instruct on HPC + Code datasets
 T4-SAFE | SINGLE GPU | ZERO OOM | FULL DATA
 Author: Boran Gündoğan
 """
@@ -21,7 +21,7 @@ def install_git(repo):
 def ensure_dependencies():
     pkgs = [
         "torch>=2.3.0", "transformers>=4.43.0", "datasets",
-        "accelerate", "bitsandbytes", "trl>=0.9.4"
+        "accelerate", "bitsandbytes", "trl>=0.9.4", "unsloth_zoo" 
     ]
     for p in pkgs:
         try:
@@ -126,14 +126,14 @@ args = TrainingArguments(
     per_device_train_batch_size=1,
     gradient_accumulation_steps=2,
     warmup_steps=5,
-    max_steps=600,
+    max_steps=400,
     learning_rate=2e-4,
     fp16=True,
     bf16=False,
     logging_steps=10,
     eval_strategy="steps",
-    eval_steps=150,
-    save_steps=300,
+    eval_steps=200,
+    save_steps=200,
     optim="adamw_8bit",
     weight_decay=0.01,
     lr_scheduler_type="linear",
@@ -156,7 +156,6 @@ trainer = SFTTrainer(
     packing=True,  # Moved to SFTTrainer
 )
 
-print("Starting training (~3h on single T4)...")
 trainer.train()
 print("Training complete.")
 

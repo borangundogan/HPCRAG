@@ -1,5 +1,5 @@
 [project]
-name = "medrag"
+name = "hpcrag"
 version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
@@ -10,6 +10,7 @@ dependencies = [
     "evaluate>=0.4.6",
     "faiss-cpu>=1.12.0",
     "fastapi>=0.121.0",
+    "streamlit>=1.51.0",
     "transformers>=4.57.1",
     "trl>=0.24.0",
     "uvicorn>=0.38.0",
