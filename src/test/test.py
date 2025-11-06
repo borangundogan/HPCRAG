@@ -9,7 +9,7 @@ from transformers import AutoModelForCausalLM, AutoTokenizer
 
 def main():
     # 1. Load model and tokenizer
-    MODEL_PATH = "model/llama3-8b-hpc-merged"   # adjust if folder name differs
+    MODEL_PATH = "model/content/merged_model/"   # adjust if folder name differs
 
     print(f"Loading model from: {MODEL_PATH}")
     device = "mps" if torch.backends.mps.is_available() else (
@@ -22,7 +22,11 @@ def main():
     model = AutoModelForCausalLM.from_pretrained(
         MODEL_PATH,
         torch_dtype=torch.float16 if device != "cpu" else torch.float32,
-        device_map="auto"
+        device_map="auto",
+        low_cpu_mem_usage=True,
+        attn_implementation="eager",      # MPS backend daha kararlı çalışır
+        trust_remote_code=True,           # Unsloth patch’leri varsa gereklidir
+        load_in_4bit=False                # quantization’ı zorla kapat
     )
 
     # 2. Example HPC / code question
